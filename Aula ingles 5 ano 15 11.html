@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb + -ing Activities</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: #ffcc00;
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        .screen {
+            display: none;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(30, 30, 60, 0.9);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 10px 5px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 #3d8b40;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-option {
+            width: 100%;
+            margin: 8px 0;
+            padding: 15px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #3a3a8c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-option:hover {
+            background-color: #4a4abc;
+            transform: scale(1.02);
+        }
+        
+        .correct {
+            background-color: #4CAF50 !important;
+        }
+        
+        .incorrect {
+            background-color: #f44336 !important;
+        }
+        
+        .question {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        .translation {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #aaddff;
+            font-style: italic;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .match-item {
+            padding: 15px;
+            background-color: #3a3a8c;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .match-item:hover {
+            background-color: #4a4abc;
+        }
+        
+        .matched {
+            background-color: #4CAF50 !important;
+        }
+        
+        .feedback {
+            font-size: 20px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .correct-feedback {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+        
+        .incorrect-feedback {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        
+        .score {
+            font-size: 22px;
+            margin: 15px 0;
+            color: #ffcc00;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #1f4068;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #ffcc00;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .activity-list {
+            list-style-type: none;
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .activity-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #3a3a8c;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        
+        .complete-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #3a3a8c;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .options-container, .match-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verb + -ing Activities</h1>
+        <h2>Like + verb + -ing</h2>
+        
+        <!-- Tela inicial -->
+        <div id="start-screen" class="screen active">
+            <h2>Welcome to Verb + -ing Game!</h2>
+            <p>Vamos praticar a estrutura "verb + -ing" com atividades divertidas!</p>
+            <p>Complete 30 atividades para testar seus conhecimentos!</p>
+            <button id="start-btn" class="btn">Começar</button>
+        </div>
+        
+        <!-- Tela de instruções -->
+        <div id="instructions-screen" class="screen">
+            <h2>Instruções</h2>
+            <ul class="activity-list">
+                <li>Você encontrará três tipos de atividades:</li>
+                <li>• Escolher a palavra correta</li>
+                <li>• Ligar palavras correspondentes</li>
+                <li>• Completar frases com -ing</li>
+            </ul>
+            <p>Todas as perguntas estão em inglês com tradução em português.</p>
+            <button id="continue-btn" class="btn">Continuar</button>
+        </div>
+        
+        <!-- Tela de questão -->
+        <div id="question-screen" class="screen">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="score" id="score">Pontuação: 0</div>
+            <div class="question" id="question"></div>
+            <div class="translation" id="translation"></div>
+            <div id="activity-container"></div>
+            <div class="feedback" id="feedback"></div>
+            <button id="next-btn" class="btn" style="display: none;">Próxima</button>
+        </div>
+        
+        <!-- Tela de resultados -->
+        <div id="results-screen" class="screen">
+            <h2>Parabéns! Você completou todas as atividades!</h2>
+            <div class="score" id="final-score">Pontuação final: 0</div>
+            <p>Você demonstrou um ótimo conhecimento da estrutura "verb + -ing"!</p>
+            <button id="restart-btn" class="btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados das atividades
+        const activities = [
+            {
+                type: "multiple-choice",
+                question: "I like ______ books.",
+                translation: "Eu gosto de ______ livros.",
+                options: ["read", "reading", "reads", "to read"],
+                correct: 1,
+                explanation: "Correto! Após 'like' usamos verbo + -ing: reading"
+            },
+            {
+                type: "multiple-choice",
+                question: "She enjoys ______ to music.",
+                translation: "Ela gosta de ______ música.",
+                options: ["listen", "listening", "listens", "to listen"],
+                correct: 1,
+                explanation: "Correto! Após 'enjoys' usamos verbo + -ing: listening"
+            },
+            {
+                type: "multiple-choice",
+                question: "We love ______ games.",
+                translation: "Nós amamos ______ jogos.",
+                options: ["play", "playing", "plays", "played"],
+                correct: 1,
+                explanation: "Correto! Após 'love' usamos verbo + -ing: playing"
+            },
+            {
+                type: "multiple-choice",
+                question: "He likes ______ TV.",
+                translation: "Ele gosta de ______ TV.",
+                options: ["watch", "watching", "watches", "to watch"],
+                correct: 1,
+                explanation: "Correto! Após 'likes' usamos verbo + -ing: watching"
+            },
+            {
+                type: "multiple-choice",
+                question: "They enjoy ______ soccer.",
+                translation: "Eles gostam de ______ futebol.",
+                options: ["play", "playing", "plays", "played"],
+                correct: 1,
+                explanation: "Correto! Após 'enjoy' usamos verbo + -ing: playing"
+            },
+            {
+                type: "complete",
+                question: "I like ______ (dance).",
+                translation: "Eu gosto de ______ (dançar).",
+                answer: "dancing",
+                explanation: "Correto! dancing"
+            },
+            {
+                type: "complete",
+                question: "She loves ______ (sing).",
+                translation: "Ela ama ______ (cantar).",
+                answer: "singing",
+                explanation: "Correto! singing"
+            },
+            {
+                type: "complete",
+                question: "We enjoy ______ (swim).",
+                translation: "Nós gostamos de ______ (nadar).",
+                answer: "swimming",
+                explanation: "Correto! swimming"
+            },
+            {
+                type: "complete",
+                question: "He likes ______ (run).",
+                translation: "Ele gosta de ______ (correr).",
+                answer: "running",
+                explanation: "Correto! running"
+            },
+            {
+                type: "complete",
+                question: "They love ______ (cook).",
+                translation: "Eles amam ______ (cozinhar).",
+                answer: "cooking",
+                explanation: "Correto! cooking"
+            },
+            {
+                type: "match",
+                question: "Match the verbs with -ing form",
+                translation: "Ligue os verbos com a forma -ing",
+                leftItems: ["read", "write", "draw", "paint", "study"],
+                rightItems: ["writing", "reading", "studying", "drawing", "painting"],
+                correctPairs: {
+                    "read": "reading",
+                    "write": "writing", 
+                    "draw": "drawing",
+                    "paint": "painting",
+                    "study": "studying"
+                },
+                explanation: "Correto! read - reading, write - writing, draw - drawing, paint - painting, study - studying"
+            },
+            {
+                type: "multiple-choice",
+                question: "My brother dislikes ______ homework.",
+                translation: "Meu irmão não gosta de ______ lição de casa.",
+                options: ["do", "doing", "does", "to do"],
+                correct: 1,
+                explanation: "Correto! Após 'dislikes' usamos verbo + -ing: doing"
+            },
+            {
+                type: "multiple-choice",
+                question: "The children love ______ in the park.",
+                translation: "As crianças amam ______ no parque.",
+                options: ["play", "playing", "plays", "played"],
+                correct: 1,
+                explanation: "Correto! Após 'love' usamos verbo + -ing: playing"
+            },
+            {
+                type: "multiple-choice",
+                question: "She finishes ______ at 5 PM.",
+                translation: "Ela termina de ______ às 17h.",
+                options: ["work", "working", "works", "to work"],
+                correct: 1,
+                explanation: "Correto! Após 'finishes' usamos verbo + -ing: working"
+            },
+            {
+                type: "multiple-choice",
+                question: "We enjoy ______ movies.",
+                translation: "Nós gostamos de ______ filmes.",
+                options: ["watch", "watching", "watches", "to watch"],
+                correct: 1,
+                explanation: "Correto! Após 'enjoy' usamos verbo + -ing: watching"
+            },
+            {
+                type: "complete",
+                question: "She stops ______ (talk) when the teacher arrives.",
+                translation: "Ela para de ______ (falar) quando a professora chega.",
+                answer: "talking",
+                explanation: "Correto! talking"
+            },
+            {
+                type: "complete",
+                question: "I like ______ (eat) pizza.",
+                translation: "Eu gosto de ______ (comer) pizza.",
+                answer: "eating",
+                explanation: "Correto! eating"
+            },
+            {
+                type: "complete",
+                question: "They love ______ (travel).",
+                translation: "Eles amam ______ (viajar).",
+                answer: "traveling",
+                explanation: "Correto! traveling"
+            },
+            {
+                type: "complete",
+                question: "He enjoys ______ (read) comics.",
+                translation: "Ele gosta de ______ (ler) quadrinhos.",
+                answer: "reading",
+                explanation: "Correto! reading"
+            },
+            {
+                type: "complete",
+                question: "We like ______ (dance) at parties.",
+                translation: "Nós gostamos de ______ (dançar) em festas.",
+                answer: "dancing",
+                explanation: "Correto! dancing"
+            },
+            {
+                type: "match",
+                question: "Match the activities",
+                translation: "Ligue as atividades",
+                leftItems: ["play", "go", "watch", "listen", "ride"],
+                rightItems: ["watching TV", "playing games", "riding a bike", "going shopping", "listening to music"],
+                correctPairs: {
+                    "play": "playing games",
+                    "go": "going shopping",
+                    "watch": "watching TV",
+                    "listen": "listening to music",
+                    "ride": "riding a bike"
+                },
+                explanation: "Correto! play - playing games, go - going shopping, watch - watching TV, listen - listening to music, ride - riding a bike"
+            },
+            {
+                type: "multiple-choice",
+                question: "I hate ______ early.",
+                translation: "Eu odeio ______ cedo.",
+                options: ["wake up", "waking up", "wakes up", "to wake up"],
+                correct: 1,
+                explanation: "Correto! Após 'hate' usamos verbo + -ing: waking up"
+            },
+            {
+                type: "multiple-choice",
+                question: "She starts ______ at 8 AM.",
+                translation: "Ela começa a ______ às 8h.",
+                options: ["study", "studying", "studies", "to study"],
+                correct: 1,
+                explanation: "Correto! Após 'starts' usamos verbo + -ing: studying"
+            },
+            {
+                type: "multiple-choice",
+                question: "They practice ______ English.",
+                translation: "Eles praticam ______ inglês.",
+                options: ["speak", "speaking", "speaks", "to speak"],
+                correct: 1,
+                explanation: "Correto! Após 'practice' usamos verbo + -ing: speaking"
+            },
+            {
+                type: "multiple-choice",
+                question: "We avoid ______ junk food.",
+                translation: "Nós evitamos ______ comida não saudável.",
+                options: ["eat", "eating", "eats", "to eat"],
+                correct: 1,
+                explanation: "Correto! Após 'avoid' usamos verbo + -ing: eating"
+            },
+            {
+                type: "complete",
+                question: "He considers ______ (buy) a new car.",
+                translation: "Ele considera ______ (comprar) um carro novo.",
+                answer: "buying",
+                explanation: "Correto! buying"
+            },
+            {
+                type: "complete",
+                question: "I miss ______ (see) my friends.",
+                translation: "Eu sinto falta de ______ (ver) meus amigos.",
+                answer: "seeing",
+                explanation: "Correto! seeing"
+            },
+            {
+                type: "complete",
+                question: "They suggest ______ (go) to the beach.",
+                translation: "Eles sugerem ______ (ir) à praia.",
+                answer: "going",
+                explanation: "Correto! going"
+            },
+            {
+                type: "complete",
+                question: "She imagines ______ (live) in Paris.",
+                translation: "Ela imagina ______ (viver) em Paris.",
+                answer: "living",
+                explanation: "Correto! living"
+            },
+            {
+                type: "complete",
+                question: "We discuss ______ (visit) the museum.",
+                translation: "Nós discutimos ______ (visitar) o museu.",
+                answer: "visiting",
+                explanation: "Correto! visiting"
+            }
+        ];
+
+        // Variáveis do jogo
+        let currentActivity = 0;
+        let score = 0;
+        let selectedMatchItems = { left: null, right: null };
+        let matchedPairs = {};
+
+        // Elementos DOM
+        const startScreen = document.getElementById('start-screen');
+        const instructionsScreen = document.getElementById('instructions-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startBtn = document.getElementById('start-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionElement = document.getElementById('question');
+        const translationElement = document.getElementById('translation');
+        const activityContainer = document.getElementById('activity-container');
+        const feedbackElement = document.getElementById('feedback');
+        const scoreElement = document.getElementById('score');
+        const finalScoreElement = document.getElementById('final-score');
+        const progressElement = document.getElementById('progress');
+
+        // Event listeners
+        startBtn.addEventListener('click', showInstructions);
+        continueBtn.addEventListener('click', startGame);
+        nextBtn.addEventListener('click', nextActivity);
+        restartBtn.addEventListener('click', restartGame);
+
+        // Funções do jogo
+        function showInstructions() {
+            startScreen.classList.remove('active');
+            instructionsScreen.classList.add('active');
+        }
+
+        function startGame() {
+            instructionsScreen.classList.remove('active');
+            questionScreen.classList.add('active');
+            loadActivity();
+        }
+
+        function loadActivity() {
+            const activity = activities[currentActivity];
+            questionElement.textContent = activity.question;
+            translationElement.textContent = activity.translation;
+            scoreElement.textContent = `Pontuação: ${score}`;
+            progressElement.style.width = `${((currentActivity + 1) / activities.length) * 100}%`;
+            
+            // Resetar feedback
+            feedbackElement.style.display = 'none';
+            feedbackElement.className = 'feedback';
+            nextBtn.style.display = 'none';
+            
+            // Limpar container de atividade
+            activityContainer.innerHTML = '';
+            
+            // Carregar atividade baseada no tipo
+            switch(activity.type) {
+                case 'multiple-choice':
+                    loadMultipleChoice(activity);
+                    break;
+                case 'match':
+                    loadMatchActivity(activity);
+                    break;
+                case 'complete':
+                    loadCompleteActivity(activity);
+                    break;
+            }
+        }
+
+        function loadMultipleChoice(activity) {
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            activity.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'btn-option';
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(index === activity.correct, activity.explanation));
+                optionsContainer.appendChild(button);
+            });
+            
+            activityContainer.appendChild(optionsContainer);
+        }
+
+        function loadMatchActivity(activity) {
+            selectedMatchItems = { left: null, right: null };
+            matchedPairs = {};
+            
+            const matchContainer = document.createElement('div');
+            matchContainer.className = 'match-container';
+            
+            // Coluna da esquerda
+            const leftColumn = document.createElement('div');
+            leftColumn.className = 'match-column';
+            
+            activity.leftItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = item;
+                div.dataset.item = item;
+                div.dataset.side = 'left';
+                
+                div.addEventListener('click', () => selectMatchItem(item, 'left', div));
+                leftColumn.appendChild(div);
+            });
+            
+            // Coluna da direita
+            const rightColumn = document.createElement('div');
+            rightColumn.className = 'match-column';
+            
+            activity.rightItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = item;
+                div.dataset.item = item;
+                div.dataset.side = 'right';
+                
+                div.addEventListener('click', () => selectMatchItem(item, 'right', div));
+                rightColumn.appendChild(div);
+            });
+            
+            matchContainer.appendChild(leftColumn);
+            matchContainer.appendChild(rightColumn);
+            activityContainer.appendChild(matchContainer);
+            
+            // Botão de verificar
+            const checkButton = document.createElement('button');
+            checkButton.className = 'btn';
+            checkButton.textContent = 'Verificar Respostas';
+            checkButton.addEventListener('click', () => checkMatchAnswers(activity));
+            activityContainer.appendChild(checkButton);
+        }
+
+        function loadCompleteActivity(activity) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'complete-input';
+            input.placeholder = 'Digite a resposta aqui...';
+            
+            const submitButton = document.createElement('button');
+            submitButton.className = 'btn';
+            submitButton.textContent = 'Verificar Resposta';
+            submitButton.addEventListener('click', () => {
+                const userAnswer = input.value.trim().toLowerCase();
+                checkAnswer(userAnswer === activity.answer.toLowerCase(), activity.explanation);
+            });
+            
+            activityContainer.appendChild(input);
+            activityContainer.appendChild(submitButton);
+        }
+
+        function selectMatchItem(item, side, element) {
+            // Se já está selecionado, desseleciona
+            if (selectedMatchItems[side] === item) {
+                selectedMatchItems[side] = null;
+                element.style.backgroundColor = '';
+                return;
+            }
+            
+            // Desseleciona outros itens do mesmo lado
+            document.querySelectorAll(`.match-item[data-side="${side}"]`).forEach(el => {
+                el.style.backgroundColor = '';
+            });
+            
+            // Seleciona o novo item
+            selectedMatchItems[side] = item;
+            element.style.backgroundColor = '#ffcc00';
+            element.style.color = '#000';
+            
+            // Se ambos os lados têm seleção, verifica se formam um par
+            if (selectedMatchItems.left && selectedMatchItems.right) {
+                const activity = activities[currentActivity];
+                const isCorrect = activity.correctPairs[selectedMatchItems.left] === selectedMatchItems.right;
+                
+                if (isCorrect) {
+                    // Adiciona o par correto
+                    matchedPairs[selectedMatchItems.left] = selectedMatchItems.right;
+                    
+                    // Marca os itens como correspondidos
+                    document.querySelectorAll(`.match-item[data-item="${selectedMatchItems.left}"]`).forEach(el => {
+                        el.classList.add('matched');
+                        el.style.backgroundColor = '#4CAF50';
+                        el.style.color = 'white';
+                    });
+                    
+                    document.querySelectorAll(`.match-item[data-item="${selectedMatchItems.right}"]`).forEach(el => {
+                        el.classList.add('matched');
+                        el.style.backgroundColor = '#4CAF50';
+                        el.style.color = 'white';
+                    });
+                    
+                    // Verifica se todas as correspondências foram feitas
+                    if (Object.keys(matchedPairs).length === Object.keys(activity.correctPairs).length) {
+                        setTimeout(() => {
+                            checkMatchAnswers(activity);
+                        }, 500);
+                    }
+                } else {
+                    // Feedback de erro
+                    feedbackElement.textContent = "Essa combinação não está correta. Tente novamente!";
+                    feedbackElement.className = 'feedback incorrect-feedback';
+                    feedbackElement.style.display = 'block';
+                    
+                    // Reseta a seleção após um tempo
+                    setTimeout(() => {
+                        selectedMatchItems = { left: null, right: null };
+                        document.querySelectorAll('.match-item').forEach(el => {
+                            if (!el.classList.contains('matched')) {
+                                el.style.backgroundColor = '';
+                                el.style.color = 'white';
+                            }
+                        });
+                        feedbackElement.style.display = 'none';
+                    }, 1500);
+                }
+                
+                // Reseta a seleção atual
+                selectedMatchItems = { left: null, right: null };
+            }
+        }
+
+        function checkMatchAnswers(activity) {
+            const allCorrect = Object.keys(activity.correctPairs).every(key => 
+                matchedPairs[key] === activity.correctPairs[key]
+            );
+            
+            if (allCorrect) {
+                score += 10;
+                feedbackElement.textContent = activity.explanation;
+                feedbackElement.className = 'feedback correct-feedback';
+            } else {
+                feedbackElement.textContent = "Algumas combinações estão incorretas. Tente novamente!";
+                feedbackElement.className = 'feedback incorrect-feedback';
+            }
+            
+            feedbackElement.style.display = 'block';
+            nextBtn.style.display = 'inline-block';
+        }
+
+        function checkAnswer(isCorrect, explanation) {
+            if (isCorrect) {
+                score += 10;
+                feedbackElement.textContent = explanation;
+                feedbackElement.className = 'feedback correct-feedback';
+                
+                // Destacar a resposta correta em múltipla escolha
+                if (activities[currentActivity].type === 'multiple-choice') {
+                    document.querySelectorAll('.btn-option').forEach((button, index) => {
+                        if (index === activities[currentActivity].correct) {
+                            button.classList.add('correct');
+                        }
+                    });
+                }
+            } else {
+                feedbackElement.textContent = explanation;
+                feedbackElement.className = 'feedback incorrect-feedback';
+                
+                // Destacar a resposta correta em múltipla escolha
+                if (activities[currentActivity].type === 'multiple-choice') {
+                    document.querySelectorAll('.btn-option').forEach((button, index) => {
+                        if (index === activities[currentActivity].correct) {
+                            button.classList.add('correct');
+                        } else {
+                            button.classList.add('incorrect');
+                        }
+                    });
+                }
+            }
+            
+            feedbackElement.style.display = 'block';
+            nextBtn.style.display = 'inline-block';
+            
+            // Desabilitar todos os botões de opção
+            document.querySelectorAll('.btn-option').forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        function nextActivity() {
+            currentActivity++;
+            
+            if (currentActivity < activities.length) {
+                loadActivity();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionScreen.classList.remove('active');
+            resultsScreen.classList.add('active');
+            finalScoreElement.textContent = `Pontuação final: ${score}`;
+        }
+
+        function restartGame() {
+            currentActivity = 0;
+            score = 0;
+            resultsScreen.classList.remove('active');
+            startScreen.classList.add('active');
+        }
+    </script>
+</body>
+</html>
